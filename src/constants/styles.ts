@@ -15,6 +15,7 @@ export const styles = {
     md: 15,
     lg: 20,
     xl: 27,
+    xxl: 30,
   },
   shadow: {
     header: {

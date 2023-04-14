@@ -5,10 +5,16 @@ import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../contexts/userContext";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_KEY } from "../constants";
+import { useWindowDimensions } from "react-native";
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const { setUser } = useContext(UserContext);
+
+  const { width, height } = useWindowDimensions();
+
+  windowWidth = width;
+  windowHeight = height;
 
   // Load any resources or data that we need prior to rendering the app
   useEffect(() => {

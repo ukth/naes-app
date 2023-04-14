@@ -1,11 +1,18 @@
-import React from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect } from "react";
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Community, Main, Notification, Question } from "../screens/MainTab";
 
-import { colors } from "../constants";
-import { HeaderBackButton, Logo, MyPressable } from "../components";
+import { colors, styles } from "../constants";
+import { BoldText, HeaderBackButton, Logo, MyPressable } from "../components";
 import { Ionicons } from "@expo/vector-icons";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { MainTabParamList } from "./MainTab";
+import { RegisteredStyle, ViewStyle } from "react-native";
 
 export type StackGeneratorParamList = {
   Main: undefined;
@@ -32,18 +39,22 @@ const screenIndexMapper: {
   [key: string]: number;
 } = {
   CommunityStack: 0,
-  MainStack: 2,
-  NotificationStack: 3,
+  MainStack: 1,
 };
 
 const Stack = createNativeStackNavigator<StackGeneratorParamList>();
 
 const StackGenerator = ({ screenName }: StackGeneratorProps) => {
-  const navigation = useNavigation();
   const route = useRoute();
-
-  // const focused = getFocusedRouteNameFromRoute(route) ?? screenName;
+  const navigation = useNavigation<BottomTabNavigationProp<MainTabParamList>>();
+  const focused = getFocusedRouteNameFromRoute(route) ?? screenName;
   // const { width } = useWindowDimensions();
+
+  // useEffect(() => {
+  //   if ([""].includes(focused) || focused.includes("Question")) {
+  //   } else {
+  //   }
+  // }, [focused]);
 
   return (
     <Stack.Navigator
@@ -56,10 +67,7 @@ const StackGenerator = ({ screenName }: StackGeneratorProps) => {
           headerStyle: {
             backgroundColor: colors.darkGray,
           },
-          headerLeft: () =>
-            navigation.getState().routes.length > 1 ? (
-              <HeaderBackButton onPress={() => navigation.pop()} />
-            ) : null,
+
           headerTitle: () => <Logo scale={5} />,
         };
       }}
@@ -72,10 +80,21 @@ const StackGenerator = ({ screenName }: StackGeneratorProps) => {
             `Question${screenIndexMapper[screenName]}` as keyof StackGeneratorParamList
           }
           component={Question}
-          options={{
-            headerShown: false,
-            presentation: "transparentModal",
-          }}
+          options={({ navigation }) => ({
+            presentation: "fullScreenModal",
+            headerLeft: () => (
+              <MyPressable onPress={navigation.goBack}>
+                <BoldText
+                  style={{
+                    fontSize: styles.fontSizes.md,
+                    marginHorizontal: 15,
+                  }}
+                >
+                  취소
+                </BoldText>
+              </MyPressable>
+            ),
+          })}
         />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Notification" component={Notification} />

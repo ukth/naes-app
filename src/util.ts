@@ -71,6 +71,7 @@ const refreshAccessToken = async (ctx: userContextType) => {
   return res;
 };
 
+/**  post data with params */
 export const postData = async (ctx: userContextType, url = "", data = {}) => {
   try {
     // const accessToken = (await AsyncStorage.getItem(ACCESS_TOKEN_KEY)) ?? "";

@@ -6,6 +6,9 @@ import { colors } from "../constants";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { Question } from "../screens/MainTab";
 import { Alert } from "react-native";
+import HomeIcon from "../../assets/images/icon_home.svg";
+import MainIcon from "../../assets/images/icon_main.svg";
+import EditIcon from "../../assets/images/icon_edit.svg";
 
 export type MainTabParamList = {
   CommunityStack: NavigatorScreenParams<StackGeneratorParamList>;
@@ -29,17 +32,19 @@ const MainTab = () => {
         headerStyle: {
           backgroundColor: colors.darkGray,
         },
+        tabBarStyle: {
+          backgroundColor: colors.darkGray,
+          shadowColor: colors.black,
+          shadowOpacity: 0.1,
+          borderTopWidth: 0,
+        },
       }}
     >
       <BottomTab.Screen
         name="CommunityStack"
         options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "ios-person" : "ios-person-outline"}
-              size={size}
-              color={color}
-            />
+          tabBarIcon: ({ focused }) => (
+            <HomeIcon height={focused ? 22 : 20} width={focused ? 22 : 20} />
           ),
         }}
       >
@@ -47,7 +52,18 @@ const MainTab = () => {
           return <StackGenerator screenName="CommunityStack" />;
         }}
       </BottomTab.Screen>
-
+      <BottomTab.Screen
+        name="MainStack"
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <MainIcon height={focused ? 22 : 20} width={focused ? 22 : 20} />
+          ),
+        }}
+      >
+        {() => {
+          return <StackGenerator screenName="MainStack" />;
+        }}
+      </BottomTab.Screen>
       <BottomTab.Screen
         name="Question"
         component={QuestionScreenComponent}
@@ -57,39 +73,12 @@ const MainTab = () => {
             navigation.navigate(`Question${navigation.getState().index}`);
           },
         })}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <EditIcon height={focused ? 22 : 20} width={focused ? 22 : 20} />
+          ),
+        }}
       />
-      <BottomTab.Screen
-        name="MainStack"
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "ios-person" : "ios-person-outline"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      >
-        {() => {
-          return <StackGenerator screenName="MainStack" />;
-        }}
-      </BottomTab.Screen>
-      <BottomTab.Screen
-        name="NotificationStack"
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "ios-person" : "ios-person-outline"}
-              size={size}
-              color={color}
-            />
-          ),
-        }}
-      >
-        {() => {
-          return <StackGenerator screenName="NotificationStack" />;
-        }}
-      </BottomTab.Screen>
     </BottomTab.Navigator>
   );
 };
